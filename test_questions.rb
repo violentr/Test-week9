@@ -4,29 +4,28 @@ def select_elements_starting_with_a(array)
 end
 
 # keep only the elements that start with a vowel
-# def select_elements_starting_with_vowel(array)
-# vowel =['o','i','a']
-# result =array.select {|letter| if  }
-# end
+def select_elements_starting_with_vowel(array)
+array.select {|word| word[0] =~/[aeiou]/ }
+end
 
 # remove instances of nil (but NOT false) from an array
 def remove_nils_from_array(array)
 	nil_el= []
-	result =array.uniq.find_all {|i| nil_el<< i if i !=nil}
+	array.uniq.find_all {|i| nil_el<< i if i !=nil}
 end
 
 # remove instances of nil AND false from an array
 def remove_nils_and_false_from_array(array)
 	nil_el =[]
 	result =array.uniq.find_all {|i| nil_el<< i if i !=nil}
-	new =result.delete_at(2)
+	del_f =result.delete(false)
 	result
 end
 
 # don't reverse the array, but reverse every word inside it. e.g.
 # ['dog', 'monkey'] becomes ['god', 'yeknom']
 def reverse_every_element_in_array(array)
-	result =array.each{|el| p el.reverse!}
+	array.each{|el| p el.reverse!}
 end
 
 # given an array of student names, like ['Bob', 'Dave', 'Clive']
@@ -34,25 +33,25 @@ end
 # [['Bob', 'Clive'], ['Bob', 'Dave'], ['Clive', 'Dave']]
 # make sure you don't have the same pairing twice, 
 def every_possible_pairing_of_students(array)
-
+	array.combination(2).to_a
 end
 
 # discard the first 3 elements of an array, 
 # e.g. [1, 2, 3, 4, 5, 6] becomes [4, 5, 6]
 def all_elements_except_first_3(array)
-	result =array.slice(3,7)
+	array.slice(3,7)
 end
 
 # add an element to the beginning of an array
 def add_element_to_beginning_of_array(array, element)
-	result =array.unshift(element)
+	array.unshift(element)
 end
 
 # sort an array of words by their last letter, e.g.
 # ['sky', 'puma', 'maker'] becomes ['puma', 'maker', 'sky']
-# def array_sort_by_last_letter_of_word(array)
-# 	result =array.sort {|x,y| }
-# end
+def array_sort_by_last_letter_of_word(array)
+	array.sort_by{|word| word[-1]}
+end
 
 # cut strings in half, and return the first half, e.g.
 # 'banana' becomes 'ban'. If the string is an odd number of letters
@@ -75,8 +74,10 @@ end
 # even numbers come first
 # so [1, 2, 3, 4, 5, 6] becomes [[2, 4, 6], [1, 3, 5]]
 def separate_array_into_even_and_odd_numbers(array)
-# 	b =Array[a.values_at(*a.each_index.select {|i| i.odd?})]
-# Array[b]+Array[a.values_at(*a.each_index.select {|i| i.even?})]
+new_array = %w[]
+  new_array << array.select(&:even?)
+  new_array << array.select(&:odd?)
+  new_array
 end
 
 # count the numbers of elements in an element which are palindromes
@@ -84,6 +85,7 @@ end
 # e.g. 'bob'. So in the array ['bob', 'radar', 'eat'], there
 # are 2 palindromes (bob and radar), so the method should return 2
 def number_of_elements_that_are_palindromes(array)
+	 array.select { |words| words == words.reverse }.count
 end
 
 # return the shortest word in an array
@@ -116,16 +118,16 @@ end
 # get the average from an array, rounded to the nearest integer
 # so [10, 15, 25] should return 33
 def average_of_array(array)
-	array.inject {|sum,x| (sum + x)}/3
+	array.inject {|sum,x| (sum + x)}/array.size
 end
 
 # get all the elements in an array, up until the first element
 # which is greater than five. e.g.
 # [1, 3, 5, 4, 1, 2, 6, 2, 1, 3, 7]
 # becomes [1, 3, 5, 4, 1, 2]
-# def get_elements_until_greater_than_five(array)
-# 	array.select {|n| n if n<=5}
-# end
+def get_elements_until_greater_than_five(array)
+	array.take_while{ |num| num < 6 }
+end
 
 # turn an array (with an even number of elements) into a hash, by
 # pairing up elements. e.g. ['a', 'b', 'c', 'd'] becomes
@@ -161,7 +163,7 @@ end
 # take out all the capital letters from a string
 # so 'Hello JohnDoe' becomes 'ello ohnoe'
 def remove_capital_letters_from_string(string)
-	string if string 
+	string.gsub(/[A-Z]/,'')
 end
 
 # round up a float up and convert it to an Integer,
@@ -185,7 +187,7 @@ end
 # get the domain name *without* the .com part, from an email address
 # so alex@makersacademy.com becomes makersacademy
 def get_domain_name_from_email_address(email)
-	email.scan(/[A-Z0-9.-]+\.[A-Z]{2,4}/)
+	 email.scan(/(?<=\@)(.*?)(?=\.)/).join('')
 end
 
 # capitalize the first letter in each word of a string, 
@@ -200,6 +202,7 @@ end
 # where 'special character' means anything apart from the letters
 # a-z (uppercase and lower) or numbers
 def check_a_string_for_special_characters(string)
+	string.match(/\W/)
 end
 
 # get the upper limit of a range. e.g. for the range 1..20, you
@@ -221,6 +224,8 @@ end
 
 # count the number of words in a file
 def word_count_a_file(file_path)
+	f_content = File.open(file_path).read
+  	f_content.split.count
 end
 
 # --- tougher ones ---
@@ -229,6 +234,7 @@ end
 # called call_method_from_string('foobar')
 # the method foobar should be invoked
 def call_method_from_string(str_method)
+
 end
 
 # return true if the date is a uk bank holiday for 2014
@@ -255,7 +261,11 @@ end
 # implement fizzbuzz without modulo, i.e. the % method
 # go from 1 to 100
 # (there's no RSpec test for this one)
-def fizzbuzz_without_modulo
+def fizzbuzz_without_modulo(number)
+	return "fizzbuzz" if number/15 !=0
+	return "buzz" if number/5 !=0
+	return "fizz" if number/3 !=0 ; return number 
+	
 end
 
 # print the lyrics of the song 99 bottles of beer on the wall
@@ -266,3 +276,5 @@ end
 # (there's no RSpec test for this one)
 def ninety_nine_bottles_of_beer
 end
+
+
